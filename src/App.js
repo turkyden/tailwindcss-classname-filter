@@ -1,161 +1,92 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { CodeFlaskReact } from "react-codeflask";
+import { utilities } from "./taiwindcss";
 
-const code1 = `
-const View = ({ title, author, list, style }) => (
-  <>
-    <div className="weax-iconblock-temp0">
-      <div className="weax-iconblock-temp0-options">
-        <h2 className="weax-iconblock-temp0-title">{title}</h2>
-        <p className="weax-iconblock-temp0-author">{author}</p>
-        <ul className="weax-iconblock-temp0-list">
-          {
-            list && list.map((v, i) => (
-              <li className="weax-iconblock-temp0-text" key={i}>
-                <a 
-                  className="weax-iconblock-temp0-href" 
-                  href={v.href || 'javascript:void(0)'} 
-                  target={v.href && '_blank'} 
-                >
-                  {v.text}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-    </div>
-    <style jsx='true'>{style}</style>
-  </>
-)
-`
-
-const code2 = `
+const CODE = ` /** 提取样式 **/
 .weax-iconblock-temp0{
-
-}
-.weax-iconblock-temp0-options{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-.weax-iconblock-temp0-title{
-  font-size: 1.125rem;  
-  padding-top: 1rem;
-  color: red;
-}
-.weax-iconblock-temp0-author{
-  padding-top: .5rem;
-  padding-bottom: .5rem;
-}
-.weax-iconblock-temp0-list{
-  width: 16rem;
-  text-align: center;
-}
-.weax-iconblock-temp0-text{
-  padding-top: .5rem;
-  padding-bottom: .5rem;
-}
-.weax-iconblock-temp0-href{
-  color: #2d3748;
-}
-.weax-iconblock-temp0-href:hover {
-  color: #4299e1;
+  color: #c7161e;
 }
 `
 
-class App extends React.Component {
-  state = {
-    code1,
-    code2
-  }
+function App() {
+  const [code, setCode] = useState(CODE);
+  const [className, setClassName] = useState('weax-iconblock-temp0');
+  const [tailwindCSS, setTailwindCSS] = useState('flex px-2');
 
-  getCodeFlaskRef1 = (codeFlask) => {
-    this.codeFlask1 = codeFlask
-  }
+  useEffect(() => {
+    console.log(utilities)
+  })
 
-  onChange1 = (code) => {
-    this.setState({ code1: code })
-  }
-
-  getCodeFlaskRef2 = (codeFlask) => {
-    this.codeFlask2 = codeFlask
-  }
-
-  onChange2 = (code) => {
-    this.setState({ code2: code })
-  }
-
-  render() {
-    return (
-      <>
-        <div className="pt-24">
-          <h2 className="text-center text-3xl text-white">TailwindCSS ClassName Filter</h2>
-          <div className="container m-auto flex pt-10">
-            <div className="w-full">
-              <CodeFlaskReact
-                id='dom1' 
-                language="js" 
-                code={this.state.code1}
-                onChange={this.onChange1}
-                editorRef={this.getCodeFlaskRef1}
-              />
-            </div>
-            <div className="w-full">
-              <CodeFlaskReact
-                id='dom2' 
-                language="css" 
-                readonly
-                code={this.state.code2}
-                onChange={this.onChange2}
-                editorRef={this.getCodeFlaskRef2}
-              />
-            </div>
-            <div className="w-full">
-              <CodeFlaskReact
-                id='dom3' 
-                language="css" 
-                code={this.state.code2}
-                onChange={this.onChange2}
-                editorRef={this.getCodeFlaskRef2}
-              />
+  return (
+    <React.Fragment>
+      <div className="pt-24">
+        <h2 className="text-center text-3xl text-white"><span role="img">✅</span> TailwindCSS ClassName Filter</h2>
+        <div className="container m-auto flex pt-10 justify-between">
+          {/** input **/}
+          <div className="w-1/2 flex justify-center">
+            <div className="w-4/5">
+              <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <div className="mb-4">
+                  <label className="block text-gray-700 text-sm font-bold mb-2">
+                    ClassName
+                  </label>
+                  <input value={className} onChange={e => setClassName(e.target.value)} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="classname" type="text" />
+                </div>
+                <div className="mb-6">
+                  <label className="block text-gray-700 text-sm font-bold mb-2">
+                    TailwindCSS Array
+                  </label>
+                  <textarea value={tailwindCSS} onChange={e => setTailwindCSS(e.target.value)} className="shadow appearance-none border rounded w-full h-64 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="tailwindcss" type="text" />
+                </div>
+                <div className="flex items-center justify-between">
+                  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                    Filter It &rarr;
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
+          {/** result **/}
+          <div className="w-1/2">
+            <CodeFlaskReact
+              id='dom1' 
+              language="js" 
+              code={code}
+              onChange={v => setCode(v)}
+            />
+          </div>
         </div>
-        <style jsx="true">{`
-          body{
-            background-color: #1a202c;
-          }
-          /* 美化滚动条样式 */
-          ::-webkit-scrollbar {
-            width: 10px;
-            height: 10px;
-            background-color: transparent;
-          }
-          /*定义滚动条轨道 内阴影+圆角*/
-          ::-webkit-scrollbar-track {
-            -webkit-box-shadow: transparent;
-            background-color: transparent;
-          }
-          /*定义滑块 内阴影+圆角*/
-          ::-webkit-scrollbar-thumb {
-            border-radius: 10px;
-            -webkit-box-shadow: none;
-            background-color: #ccc;
-          }
-          .codeflask{
-            width: 400px;
-            height: 600px;
-            border-radius: 0.25rem;
-          }
-        `}
-        </style>
-      </>
-    )
-  }
+      </div>
+      <style jsx>{`
+        body{
+          background-color: #1a202c;
+        }
+        /* 美化滚动条样式 */
+        ::-webkit-scrollbar {
+          width: 10px;
+          height: 10px;
+          background-color: transparent;
+        }
+        /*定义滚动条轨道 内阴影+圆角*/
+        ::-webkit-scrollbar-track {
+          -webkit-box-shadow: transparent;
+          background-color: transparent;
+        }
+        /*定义滑块 内阴影+圆角*/
+        ::-webkit-scrollbar-thumb {
+          border-radius: 10px;
+          -webkit-box-shadow: none;
+          background-color: #ccc;
+        }
+        .codeflask{
+          width: 500px;
+          height: 600px;
+          border-radius: 0.25rem;
+        }
+      `}
+      </style>
+    </React.Fragment>
+  )
 }
-
-
 
 export default App;
